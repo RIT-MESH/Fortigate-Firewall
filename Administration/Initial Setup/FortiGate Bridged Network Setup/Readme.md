@@ -24,20 +24,55 @@ Below is the clean, final summary of the steps we followed to make the FortiGate
                |
           webterm-1
 ```
-## 1. Add a Bridged Adapter to the GNS3 VM
-
-* Open **VMware Workstation**.
-* Power off the **GNS3 VM**.
-* Go to **Settings → Add… → Network Adapter**.
-* Set the new adapter to **Bridged (Automatic)**.
-* Turn on **Replicate physical network connection state** (recommended for Wi-Fi).
-* Confirm that GNS3 VM now shows:
-
-  * `Network Adapter 4 = Bridged (Automatic)`.
 
 ---
 
-## 2. Verify Bridged Adapter Inside the GNS3 VM (Linux)
+# **Step 1: Add a Bridged Adapter to the GNS3 VM (with VMnet0 check)**
+
+### **1. Open VMware Workstation**
+
+Make sure your GNS3 VM is **powered off**.
+
+### **2. Add a new network adapter**
+
+* Go to:
+  **GNS3 VM → Settings → Add… → Network Adapter**
+* Select:
+  **Bridged (Automatic)**
+* Enable:
+  **Replicate physical network connection state** (important for Wi-Fi users)
+
+### **3. Verify VMware Bridge is actually mapped to VMnet0**
+
+This part is important and you did it manually:
+
+#### **Open “Virtual Network Editor” → Configure Adapters**
+
+* Find **VMnet0**
+* Make sure VMnet0 is set to **Bridge to your Wi-Fi adapter**
+  (Example: *Intel(R) Wi-Fi 6 AX201*, *Qualcomm Wireless*, etc.)
+
+If VMnet0 is not mapped manually, VMware sometimes bridges to the wrong adapter.
+
+### **4. Confirm inside GNS3 VM settings**
+
+Your VM should now show adapters like:
+
+| Adapter               | Mode                    |
+| --------------------- | ----------------------- |
+| Network Adapter 1     | Host-only               |
+| Network Adapter 2     | NAT                     |
+| Network Adapter 3     | Custom (VMnet0)         |
+| **Network Adapter 4** | **Bridged (Automatic)** |
+
+### **5. Start the GNS3 VM**
+
+Now the VM will receive traffic correctly from your real Wi-Fi router.
+
+
+---
+
+# 2. Verify Bridged Adapter Inside the GNS3 VM (Linux)
 
 Inside the VM terminal:
 
@@ -53,7 +88,7 @@ This interface received an IP from your **home Wi-Fi network**.
 
 ---
 
-## 3. Create a New Cloud Node in GNS3
+# 3. Create a New Cloud Node in GNS3
 
 * Delete old Cloud nodes.
 * Drag a **new Cloud** into the topology.
@@ -69,7 +104,7 @@ The Cloud now shows:
 
 ---
 
-## 4. Connect FortiGate to the Cloud
+# 4. Connect FortiGate to the Cloud
 
 * Connect **FortiGate port3 → Cloud eth2**.
 
@@ -81,7 +116,7 @@ webterm → port1 (LAN) → FortiGate → port3 (WAN) → Cloud (eth2)
 
 ---
 
-## 5. Configure FortiGate Port3 as DHCP Client
+# 5. Configure FortiGate Port3 as DHCP Client
 
 Inside FortiGate CLI:
 
@@ -109,7 +144,7 @@ Port3 received a valid **home Wi-Fi network IP**, e.g.:
 
 ---
 
-## 6. Access FortiGate GUI from Your Local Browser
+# 6. Access FortiGate GUI from Your Local Browser
 
 Open:
 
@@ -123,7 +158,7 @@ This confirmed the bridged Cloud → GNS3 VM → FortiGate path works correctly.
 
 ---
 
-## Final Result
+# Final Result
 
 Your FortiGate is now reachable directly from your laptop through the bridged network, just like real hardware. All traffic flows from Wi-Fi → VM → Cloud node → FortiGate.
 
