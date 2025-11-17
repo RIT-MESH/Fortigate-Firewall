@@ -1,4 +1,4 @@
-# Complete Command Summary for R1–FortiGate–LAN–Cloud Topology
+# DHCP Server and DHCP Relay
 
 This document lists every command and configuration used to build the full network path:
 
