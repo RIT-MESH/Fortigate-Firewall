@@ -8,7 +8,7 @@ Designed to serve as both a study reference and a real-world configuration guide
 
 ## 📘 What This Repository Covers
 
-### 🧩 **Section 3: Administration**
+### 🧩 **Section 1: Administration**
 - System settings and basic configuration  
 - Hostname, DNS, and time setup  
 - Management access (HTTP/HTTPS/SSH)  
@@ -18,7 +18,7 @@ Designed to serve as both a study reference and a real-world configuration guide
 
 ---
 
-### 🌐 **Section 4: Interface Configuration**
+### 🌐 **Section 2: Interface Configuration**
 - Physical & logical interfaces  
 - Static and DHCP addressing  
 - VLAN creation and tagging  
@@ -27,7 +27,7 @@ Designed to serve as both a study reference and a real-world configuration guide
 
 ---
 
-### 🔀 **Section 5: NAT & Transparent Mode**
+### 🔀 **Section 3: NAT & Transparent Mode**
 - Source NAT (SNAT) / Outbound NAT  
 - Destination NAT (DNAT) / Port forwarding  
 - Virtual IP (VIP) configuration  
@@ -36,7 +36,7 @@ Designed to serve as both a study reference and a real-world configuration guide
 
 ---
 
-### 🛰️ **Section 6: Routing**
+### 🛰️ **Section 4: Routing**
 - Static routing  
 - Distance & priority settings  
 - ECMP configuration  
@@ -45,7 +45,7 @@ Designed to serve as both a study reference and a real-world configuration guide
 
 ---
 
-### 🛡️ **Section 7: Security Profiles**
+### 🛡️ **Section 5: Security Profiles**
 - Firewall policy creation  
 - Application control  
 - URL & Web filtering  
@@ -55,7 +55,7 @@ Designed to serve as both a study reference and a real-world configuration guide
 
 ---
 
-### 🔐 **Section 8: Authentication**
+### 🔐 **Section 6: Authentication**
 - Local user authentication  
 - LDAP / RADIUS integration  
 - Two-factor authentication (2FA)  
@@ -64,7 +64,7 @@ Designed to serve as both a study reference and a real-world configuration guide
 
 ---
 
-### 🔁 **Section 9: High Availability (HA)**
+### 🔁 **Section 7: High Availability (HA)**
 - Active-Passive vs Active-Active modes  
 - Cluster requirements and setup  
 - Failover behavior and testing  
@@ -72,7 +72,7 @@ Designed to serve as both a study reference and a real-world configuration guide
 
 ---
 
-### 🌍 **Section 10: SD-WAN**
+### 🌍 **Section 8: SD-WAN**
 - SD-WAN interface creation  
 - Performance SLA configuration  
 - Traffic steering rules  
