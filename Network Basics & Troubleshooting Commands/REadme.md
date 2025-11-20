@@ -1,626 +1,140 @@
-# Network Basics & Troubleshooting Commands (FortiGate, Router, Switch)
+# Full Network Basics, Configuration & Troubleshooting Reference
 
-This README provides a clean, practical reference for essential configuration and troubleshooting commands used in FortiGate firewalls, Routers (Cisco-style), and Switches. It is meant for quick use in labs, GNS3, Packet Tracer, or real devices.
+This document contains **all FortiGate, Switch, and Router commands**, fully structured, and consolidated. It includes:
 
----
-
-# 1. FortiGate Basics
-
-## 1.1 Common Navigation Commands
-
-```
-show        ← Display running configuration
-config      ← Enter configuration mode
-end         ← Exit config mode
-execute     ← Run operational system commands
-get         ← Show status/info for components
-```
+* FortiGate basics, interface configs, DHCP, redundant WAN, troubleshooting
+* Switch (Cisco L2) VLAN, STP, EtherChannel, troubleshooting
+* Router (Cisco L3) WAN, DHCP relay/server, routing, redundant WAN, troubleshooting
+* End‑to‑end workflow, templates, and ping matrix
 
 ---
 
-# 2. FortiGate Essential Commands
+# 1. FORTIGATE
 
-## 2.1 Interface Information
-
-```
-get system interface                 ← Show all interfaces
-get system interface physical        ← Show hardware port status
-execute ping <IP>                    ← Ping from FortiGate
-execute traceroute <IP>              ← Trace route
-```
-
-## 2.2 Routing
+## 1.1 Basics
 
 ```
-get router info routing-table all    ← Full routing table
-get router info bgp summary          ← BGP status (if used)
-get router info ospf neighbor        ← OSPF neighbors
-```
-
-## 2.3 Firewall Policies
-
-```
-show firewall policy                 ← View firewall rules
-```
-
-## 2.4 Logs & Debug
-
-```
-diagnose debug enable
-
-# Check flows
-diagnose debug flow filter addr <IP>
-diagnose debug flow trace start 20
-
-diagnose debug disable
-```
-
-## 2.5 System Monitoring
-
-```
-get system status                    ← Version + System info
-get hardware nic <port>              ← Hardware-level interface info
+show                     # Display current config
+config                   # Enter config mode
+end                      # Exit config mode
+execute                  # System-level ops
+get                      # Show system info
 ```
 
 ---
 
-# 3. Router (Cisco) Basics
+## 1.2 Essential Commands
 
-## 3.1 Navigation
-
-```
-show running-config
-show startup-config
-configure terminal
-exit
-```
-
-## 3.2 Interface & IP Commands
+### Interface Information
 
 ```
-show ip interface brief              ← Summary of all interfaces
-show interfaces                      ← Detailed interface info
-interface g0/0
- ip address X.X.X.X Y.Y.Y.Y
- no shutdown
+get system interface                      # Show all interfaces, IPs, status
+get system interface physical             # Hardware-level info (speed/duplex)
+execute ping <IP>                         # Connectivity test
+execute traceroute <IP>                   # Path check
 ```
 
-## 3.3 Routing Commands
+### Routing
 
 ```
-show ip route                        ← Routing table
-show ip protocols                    ← Dynamic routing protocol details
-show ip ospf neighbor                ← OSPF neighbors
-show ip bgp summary                  ← BGP status
+get router info routing-table all         # Full routing table
+get router info bgp summary               # BGP status
+get router info ospf neighbor             # OSPF neighbors
 ```
 
-## 3.4 Connectivity Troubleshooting
+### Firewall policies
 
 ```
-ping <IP>
-traceroute <IP>
+show firewall policy                      # List rules in numerical order
 ```
 
 ---
 
-# 4. Switch Basics (Layer 2 / Cisco Style)
+## 1.3 Core Configuration Blocks
 
-## 4.1 Interface & VLAN Commands
-
-```
-show vlan brief                      ← VLAN status
-show interfaces status               ← Port status summary
-show mac address-table               ← MAC table
-```
-
-## 4.2 Access & Trunk Configuration
+### System interface
 
 ```
-# Access Port
-interface e0/1
- switchport mode access
- switchport access vlan 10
-
-# Trunk Port
-interface e0/1
- switchport mode trunk
- switchport trunk allowed vlan 10,20,30
-```
-
-## 4.3 Spanning Tree
-
-```
-show spanning-tree                   ← View STP status
-```
-
----
-
-# 5. End-to-End Troubleshooting Workflow
-
-## Step 1: Check Connectivity
-
-* From PC:
-
-```
-ping gateway
-ping remote network
-```
-
-* From Router:
-
-```
-ping <IP>
-traceroute <IP>
-```
-
-* From FortiGate:
-
-```
-execute ping <IP>
-```
-
----
-
-## Step 2: Check Interface Status
-
-* FortiGate:
-
-```
-get system interface
-```
-
-* Router:
-
-```
-show ip interface brief
-```
-
-* Switch:
-
-```
-show interfaces status
-```
-
----
-
-## Step 3: Check VLAN & Trunking
-
-* Switch:
-
-```
-show vlan brief
-show interfaces trunk
-```
-
----
-
-## Step 4: Check Routing
-
-* FortiGate:
-
-```
-get router info routing-table all
-```
-
-* Router:
-
-```
-show ip route
-```
-
----
-
-## Step 5: Check Firewall Policies (FortiGate)
-
-```
-show firewall policy
-```
-
----
-
-## Step 6: Use Debug Tools (FortiGate)
-
-```
-diagnose debug reset
-diagnose debug flow filter clear
-diagnose debug flow filter addr <IP>
-diagnose debug flow trace start 20
-```
-
----
-
-# 6. Quick Cheat Sheet
-
-### FortiGate
-
-* `execute ping` → Connectivity test
-* `get system interface` → Interface status
-* `diagnose debug flow` → Packet path debugging
-
-### Router
-
-* `show ip int brief` → Fast interface check
-* `show ip route` → Routing table
-
-### Switch
-
-* `show vlan brief` → VLAN info
-* `show mac address-table` → MAC learning
-
----
-
-If you want, I can also create versions for:
-
-* Advanced routing (BGP, OSPF, redistribution)
-* FortiGate NAT, VIP, SD-WAN
-* GNS3 lab-ready templates
-* A printable PDF cheat sheet
-
----
-
-# 7. Additional FortiGate Useful Sections
-
-## 7.1 NAT Troubleshooting
-
-```
-show firewall central-nat
-show firewall policy
-get router info routing-table all
-
-# Test SNAT behavior
-diagnose firewall iprope lookup <src_ip> <dst_ip> <protocol>
-```
-
-## 7.2 Check Session Table
-
-```
-diag sys session list
-# Filter by source
-diag sys session filter src <IP>
-# Filter by destination
-diag sys session filter dst <IP>
-```
-
-## 7.3 Clear Sessions
-
-```
-diag sys session clear
-```
-
----
-
-# 8. Additional Router (Cisco) Troubleshooting
-
-## 8.1 ARP & Neighbor Issues
-
-```
-show ip arp
-clear ip arp
-```
-
-## 8.2 Interface Errors
-
-```
-show interfaces counters errors
-show interfaces | include error
-```
-
-## 8.3 Routing Protocol Debug
-
-```
-debug ip routing
-! OSPF
-debug ip ospf events
-debug ip ospf adj
-! EIGRP
-debug eigrp packets
-debug eigrp fsm
-```
-
----
-
-# 9. Additional Switch (Cisco) Troubleshooting
-
-## 9.1 Port Security
-
-```
-show port-security
-show port-security interface <int>
-```
-
-## 9.2 Errors & Duplex Issues
-
-```
-show interfaces <int> counters errors
-show interfaces <int> status
-```
-
-## 9.3 Trunk Problems
-
-```
-show interfaces trunk
-show spanning-tree vlan <ID>
-```
-
----
-
-# 10. Common Real-World Troubleshooting Scenarios
-
-## Scenario 1: PC cannot reach gateway
-
-**Check:**
-
-* Wrong VLAN on switch
-* Wrong default gateway on PC
-* Redundant interface down
-* Policy blocking traffic (FortiGate)
-
-**Commands:**
-
-```
-# Switch
-show vlan brief
-
-# FortiGate
-get system interface
-execute ping <PC>
-```
-
----
-
-## Scenario 2: Two networks cannot communicate
-
-**Possible causes:**
-
-* Missing route
-* Policy not created
-* Wrong subnet mask
-* Trunk not carrying VLANs
-
-**Commands:**
-
-```
-# Router
-show ip route
-
-# FortiGate
-get router info routing-table all
-show firewall policy
-
-# Switch
-show interfaces trunk
-```
-
----
-
-## Scenario 3: Internet not working
-
-**Check:**
-
-* Default route
-* NAT rule
-* DNS
-* ISP link
-
-**Commands:**
-
-```
-# FortiGate
-get router info routing-table all
-show firewall policy
-show firewall central-nat
-execute ping 8.8.8.8
-execute ping google.com
-```
-
----
-
-# 11. Quick Templates
-
-## 11.1 FortiGate VLAN Template
-
-```
-config system interface
-    edit vlan10
-        set vdom root
-        set ip 192.168.10.1 255.255.255.0
-        set interface port1
-        set vlanid 10
-    next
-end
-```
-
-## 11.2 Cisco Router Static Route Template
-
-```
-ip route 0.0.0.0 0.0.0.0 <next-hop>
-```
-
-## 11.3 Cisco Switch Trunk Template
-
-```
-interface g0/1
- switchport mode trunk
- switchport trunk allowed vlan 10,20,30
-```
-
----
-
-# 12. Very Useful Ping Matrix
-
-Use this matrix when diagnosing multi-device issues:
-
-| Test From            | Test To                | Purpose |
-| -------------------- | ---------------------- | ------- |
-| PC → Gateway         | Connectivity, VLAN OK  |         |
-| PC → Other PC        | Inter-VLAN or L2 issue |         |
-| PC → Router          | Routing + VLAN OK      |         |
-| PC → FortiGate       | L2/L3 path OK          |         |
-| FortiGate → PC       | Reverse-path + routing |         |
-| FortiGate → Internet | WAN + NAT              |         |
-| Router → FortiGate   | Routing neighbor check |         |
-
----
-
-# 13. Need Even More?
-
-I can add:
-
-* SD-WAN basics
-* BGP complete lab
-* OSPF multi-area
-* Redundant WAN setup
-* DHCP relay + servers
-* GNS3 full sample topologies
-
-Tell me what you want next.
-
----
-
-# 14. FortiGate Core Configuration Blocks (Most Used)
-
-Below are the **main FortiGate configuration trees** you will use constantly.
-
-## 14.1 `config system interface`
-
-Used to configure:
-
-* Physical interfaces
-* VLAN interfaces
-* Redundant interfaces
-* Aggregate (LACP) interfaces
-* Loopback interfaces
-
-### Example
-
-```
-config system interface
+config system interface                   # Interface config tree
     edit port1
-        set ip 192.168.1.99 255.255.255.0
+        set ip 192.168.1.99/24            # Assign IP
         set allowaccess ping http https ssh
         set role lan
     next
 end
 ```
 
----
-
-## 14.2 `config system global`
-
-Used for **system-wide settings** such as hostname, management ports, GUI preferences, DNS, inspection mode.
-
-### Example
+### System global
 
 ```
 config system global
     set hostname FGT-LAB
-    set timezone 04
-    set admintimeout 30
     set gui-theme dark
+    set admintimeout 30
 end
 ```
 
----
-
-## 14.3 `config system admin`
-
-Used to create, modify, or delete admin accounts.
-
-### Example
+### Admin configuration
 
 ```
 config system admin
     edit admin2
-        set password Forti123
+        set password StrongPass
         set access-profile super_admin
-        set two-factor email
     next
 end
 ```
 
 ---
 
-# 14. FortiGate Configuration Modes (GLOBAL vs CONFIG)
+## 1.4 FortiGate Configuration Modes
 
-FortiGate has **two major configuration layers**: **Global Mode** and **VDOM Mode**.
-Some commands only work in one of these modes depending on device setup.
-
-## 14.1 Global Configuration Mode
-
-Used when multiple VDOMs exist. Lets you manage system-wide settings.
-
-### Enter Global Mode
+### Global Mode
 
 ```
-config global
-```
-
-### Exit Global Mode
-
-```
+config global            # Manage system-wide & HA settings
 end
 ```
 
-### Common Global Mode Commands
-
-```
-config system global              ← system-wide settings
-config system admin               ← admin accounts
-config router static              ← static routes (depending on vdom)
-config system ha                  ← HA cluster settings
-```
-
----
-
-## 14.2 VDOM (Virtual Domain) Mode
-
-Each VDOM acts like its own firewall.
-If your unit uses VDOMs, you must enter the specific VDOM before running interface or policy commands.
-
-### Enter a VDOM
-
-```
-config vdom
-edit <vdom-name>
-```
-
-Example:
+### VDOM Mode
 
 ```
 config vdom
 edit root
-```
-
-### Exit VDOM
-
-```
 end
 ```
 
 ---
 
-# 15. FortiGate Interface Configuration Deep Dive
+## 1.5 Global Useful Commands
 
-Below are the most important interface-related config blocks.
+```
+get system status                       # Serial, version, uptime
+get system performance status           # CPU, RAM
+execute traceroute <IP>                 # Trace path
+execute ping-option repeat 5 <IP>       # Enhanced ICMP test
+```
 
-## 15.1 Configure a Physical Interface
+---
+
+## 1.6 Interface Configuration Deep Dive
+
+### Physical Interface
 
 ```
 config system interface
     edit port1
         set ip 192.168.1.99 255.255.255.0
         set allowaccess ping http https ssh
-        set role lan
     next
 end
 ```
 
-## 15.2 Configure a VLAN Interface
+### VLAN Interface
 
 ```
 config system interface
     edit vlan10
-        set vdom root
         set interface port1
         set vlanid 10
         set ip 192.168.10.1 255.255.255.0
@@ -628,7 +142,7 @@ config system interface
 end
 ```
 
-## 15.3 Configure a Redundant Interface
+### Redundant Interface (active/passive ports)
 
 ```
 config system interface
@@ -640,11 +154,11 @@ config system interface
 end
 ```
 
-## 15.4 Configure an Aggregate (LACP) Interface
+### Aggregate (LACP)
 
 ```
 config system interface
-    edit LACP-AGG
+    edit AGG1
         set type aggregate
         set member port3 port4
         set lacp-mode active
@@ -653,53 +167,404 @@ config system interface
 end
 ```
 
-## 15.5 Configure DHCP Server on an Interface
+---
+
+## 1.7 DHCP Server
 
 ```
 config system dhcp server
     edit 1
         set interface vlan10
-        set lease-time 86400
         config ip-range
             edit 1
                 set start-ip 192.168.10.50
                 set end-ip 192.168.10.200
             next
         end
-        set default-gateway 192.168.10.1
         set netmask 255.255.255.0
+        set default-gateway 192.168.10.1
     next
 end
 ```
 
 ---
 
-# 16. FortiGate Global Useful Commands
+## 1.8 DHCP Relay
 
 ```
-get system status                ← firmware, serial, uptime
-get system performance status    ← CPU & memory usage
-get router info bgp summary      ← BGP details
-get router info ospf interface   ← OSPF interface summary
-execute traceroute <IP>          ← trace path
-execute ping-option repeat 5     ← ping with options
+config system interface
+    edit lan
+        set ip 192.168.10.1 255.255.255.0
+        set dhcp-relay-service enable
+        set dhcp-relay-ip 10.0.0.10
+    next
+end
 ```
 
 ---
 
-# 17. FortiGate Debug Levels (Very Useful)
+## 1.9 Redundant WAN (SD‑WAN)
 
-## Set debug level
+```
+config system virtual-wan-link
+    set status enable
+    config members
+        edit 1
+            set interface wan1
+            set gateway 203.0.113.1
+        next
+        edit 2
+            set interface wan2
+            set gateway 198.51.100.1
+        next
+    end
+    config health-check
+        edit google
+            set server 8.8.8.8
+        next
+    end
+    config service
+        edit 1
+            set src all
+            set dst all
+            set priority-members 1 2
+        next
+    end
+end
+```
+
+---
+
+## 1.10 Logs & Debug Tools
 
 ```
 diagnose debug enable
 diagnose debug console timestamp enable
-```
-
-## Disable debug (always do this!)
-
-```
+diagnose debug flow filter addr <IP>
+diagnose debug flow trace start 20
 diagnose debug disable
 ```
 
 ---
+
+## 1.11 FortiGate Troubleshooting (Unified)
+
+### NAT
+
+```
+show firewall central-nat
+show firewall policy
+diagnose firewall iprope lookup <src> <dst> <protocol>
+```
+
+### Sessions
+
+```
+diag sys session list
+diag sys session filter src <IP>
+```
+
+### Connectivity
+
+```
+execute ping <IP>
+execute traceroute <IP>
+```
+
+### Routing
+
+```
+get router info routing-table all
+```
+
+---
+
+# 2. SWITCH (Cisco L2)
+
+---
+
+## 2.1 Basics
+
+```
+show vlan brief                      # VLAN list
+show interfaces status               # Port states
+show mac address-table               # L2 forwarding table
+```
+
+---
+
+## 2.2 VLANs & Ports
+
+### Access Port
+
+```
+interface e0/1
+ switchport mode access
+ switchport access vlan 10
+```
+
+### Trunk Port
+
+```
+interface g0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30
+```
+
+---
+
+## 2.3 STP
+
+```
+show spanning-tree
+```
+
+### Protection
+
+```
+spanning-tree bpduguard enable
+spanning-tree guard root
+spanning-tree guard loop
+```
+
+---
+
+## 2.4 EtherChannel (LACP)
+
+```
+interface range g0/1 - 2
+ channel-group 1 mode active
+!
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30
+```
+
+---
+
+## 2.5 Switch Troubleshooting
+
+```
+show vlan brief                      # Missing VLAN
+show interfaces trunk                # Trunk mismatch
+show mac address-table               # MAC movement
+show interfaces counters errors      # CRC, drops
+show spanning-tree vlan 10           # STP state
+```
+
+---
+
+# 3. ROUTER (Cisco L3)
+
+---
+
+## 3.1 Router Basics
+
+```
+show running-config                   # Active config
+show startup-config                   # Boot config
+configure terminal                    # Enter config mode
+exit                                   # Move back one level
+```
+
+---
+
+## 3.2 Interface & IP
+
+```
+show ip interface brief               # Status + IP summary
+show interfaces                       # Detailed stats
+
+interface g0/0
+ ip address X.X.X.X Y.Y.Y.Y
+ no shutdown
+```
+
+---
+
+## 3.3 Routing Commands
+
+```
+show ip route                         # Complete routing table
+show ip protocols                     # Protocols running (OSPF/EIGRP)
+show ip ospf neighbor                 # OSPF adjacency states
+show ip bgp summary                   # BGP peer states & prefixes
+```
+
+---
+
+## 3.4 Connectivity
+
+```
+ping <IP>
+traceroute <IP>
+```
+
+---
+
+## 3.5 WAN Types
+
+### Static
+
+```
+interface g0/0
+ ip address 203.0.113.2 255.255.255.252
+```
+
+### DHCP
+
+```
+interface g0/0
+ ip address dhcp
+```
+
+### PPPoE
+
+```
+interface Dialer1
+ ip address negotiated
+ encapsulation ppp
+ dialer pool 1
+```
+
+---
+
+## 3.6 DHCP Server
+
+```
+ip dhcp pool LAN
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 8.8.8.8
+```
+
+---
+
+## 3.7 DHCP Relay
+
+```
+interface Vlan10
+ ip address 192.168.10.1 255.255.255.0
+ ip helper-address 10.0.0.10
+```
+
+---
+
+## 3.8 Redundant WAN (IP SLA)
+
+```
+ip sla 1
+ icmp-echo 8.8.8.8 source-interface g0/0
+ frequency 5
+ip sla schedule 1 life forever start-time now
+
+track 1 ip sla 1 reachability
+
+ip route 0.0.0.0 0.0.0.0 203.0.113.1 track 1
+ip route 0.0.0.0 0.0.0.0 198.51.100.1 200
+```
+
+---
+
+## 3.9 Router Troubleshooting
+
+```
+show ip arp                           # ARP table
+show interfaces counters errors       # CRC/drop
+show ip ospf neighbor                 # OSPF state
+show ip bgp summary                   # BGP up/down
+```
+
+---
+
+# 4. End‑to‑End Troubleshooting Workflow
+
+### Step 1 – Connectivity
+
+```
+PC → Gateway
+PC → Remote
+FGT → Internet
+```
+
+### Step 2 – Interfaces
+
+```
+FGT: get system interface
+RTR: show ip int brief
+SW:  show interfaces status
+```
+
+### Step 3 – VLAN/Trunk
+
+```
+show vlan brief
+show interfaces trunk
+```
+
+### Step 4 – Routing
+
+```
+FGT → get router info routing-table all
+RTR → show ip route
+```
+
+### Step 5 – Policies (FGT)
+
+```
+show firewall policy
+```
+
+### Step 6 – Debug (FGT)
+
+```
+diag debug flow trace start 20
+```
+
+---
+
+# 5. Quick Templates
+
+### FortiGate VLAN
+
+```
+config system interface
+ edit vlan10
+  set interface port1
+  set vlanid 10
+  set ip 192.168.10.1 255.255.255.0
+ next
+end
+```
+
+### Cisco Router Static Route
+
+```
+ip route 0.0.0.0 0.0.0.0 <next-hop>
+```
+
+### Cisco Switch Trunk
+
+```
+interface g0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30
+```
+
+---
+
+# 6. Ping Matrix
+
+| From → To          | Purpose                 |
+| ------------------ | ----------------------- |
+| PC → Gateway       | VLAN/Interface check    |
+| PC → PC            | L2 or L3 issue          |
+| PC → Router        | Routing + VLAN OK       |
+| PC → FortiGate     | L3 path correctness     |
+| FGT → PC           | Reverse path + ARP      |
+| FGT → Internet     | WAN + NAT operation     |
+| Router → FortiGate | Routing neighbor checks |
+
+---
+
+End of consolidated document.
