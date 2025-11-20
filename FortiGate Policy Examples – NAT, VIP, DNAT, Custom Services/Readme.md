@@ -666,9 +666,7 @@ config firewall policy
 end
 ```
 
----
 
-End of README.
 
 ---
 
