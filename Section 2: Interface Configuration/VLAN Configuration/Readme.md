@@ -271,22 +271,65 @@ This section provides common commands to diagnose connectivity issues on the swi
 
 ### On Switch
 
+Below are the most important troubleshooting commands with clear explanations.
+
 ```
 show vlan brief
+```
+
+Shows all VLANs configured on the switch and which ports belong to each VLAN.
+
+```
 show ip interface brief
+```
+
+Displays all Layer‑3 (SVI) interfaces with their IP addresses and up/down status.
+
+```
 show run
+```
+
+Shows the full running configuration of the switch, including VLANs, ports, and routing.
+
+```
 show interfaces trunk
+```
+
+Displays trunk ports, allowed VLANs, and tagging status. Used to confirm the switch → FortiGate trunk.
+
+```
 ping 192.168.x.x
 ```
 
+Tests connectivity to gateways, other VLANs, FortiGate, or PCs. Replace x.x.x.x with the target IP.
+
 ### On FortiGate
+
+Below are essential troubleshooting commands for diagnosing FortiGate network issues.
 
 ```
 diag netlink interface list
+```
+
+Shows all FortiGate interfaces, their link status, and kernel-level network information.
+
+```
 get system interface
+```
+
+Displays all configured interfaces, their IP addresses, roles, and administrative status.
+
+```
 execute ping 192.168.x.x
+```
+
+Tests connectivity from the FortiGate to VLAN gateways, PCs, or external IPs.
+
+```
 get router info routing-table all
 ```
+
+Shows the full routing table, which helps verify default routes, static routes, and learned routes.
 
 ### PC Level
 
@@ -314,15 +357,9 @@ This section verifies all network components are configured properly and working
 
 ---
 
-
-
----
-
 ## 11. WAN / ISP Setup
 
-This section configures the ISP/WAN interface on the FortiGate, including DHCP/static IP, NAT, and default routing so internal VLANs can reach the internet. (FortiGate)
-
-This section adds full WAN configuration so the VLAN networks can reach the internet.
+This section configures the ISP/WAN interface on the FortiGate, including DHCP/static IP, NAT, and default routing so internal VLANs can reach the internet.
 
 ### 11.1 Configure WAN Interface (port2 example)
 
@@ -409,4 +446,3 @@ PC → SVI Gateway (Switch) → FortiGate VLAN10 → NAT on port2 → ISP → In
 ```
 
 ---
-
