@@ -97,6 +97,120 @@ interface g0/3
  exit
 end
 ```
+# Trunk Ports – Theory Explained 
+
+#### 1. What Is a Trunk Port?
+
+A **trunk port** is a switch port that carries traffic for **multiple VLANs** at the same time. While an access port belongs to only one VLAN, a trunk allows many VLANs to travel over a single physical cable.
+
+Think of a trunk like a **highway with multiple lanes**. Each lane represents a VLAN.
+
+---
+
+#### 2. Why Trunks Are Needed
+
+Trunk links are used when you want to send several VLANs across one connection, such as:
+
+* Switch → Switch
+* Switch → Router
+* Switch → Firewall (FortiGate)
+* Switch → VMware/Hyper-V/Proxmox host
+
+Without a trunk, you would need **one physical cable per VLAN**, which is not practical.
+
+Trunking solves this by carrying all VLANs together.
+
+---
+
+#### 3. How Trunks Work (Simple Explanation)
+
+When traffic leaves an access port, it is **untagged** (no VLAN ID). But once it enters a trunk port, the switch adds a **VLAN tag**—a small label inside the Ethernet frame.
+
+This tag includes:
+
+* VLAN ID (10, 20, 30, etc.)
+* Priority bits (for QoS)
+
+The receiving switch/firewall reads the tag and delivers the frame to the correct VLAN.
+
+This is called **802.1Q VLAN tagging**.
+
+---
+
+#### 4. Tagged vs. Untagged
+
+* **Tagged** traffic contains a VLAN ID → used on trunk links
+* **Untagged** traffic has no VLAN ID → used on access ports
+
+A trunk normally has:
+
+* One **native VLAN** (untagged)
+* All other VLANs **tagged**
+
+Example:
+
+* Native VLAN: 10
+* Tagged VLANs: 20, 30, 40
+
+---
+
+#### 5. Trunking in our Network
+
+In our topology:
+
+```
+Switch g0/0  <—— TRUNK ——>  FortiGate port1
+```
+
+The trunk carries:
+
+* VLAN 10
+* VLAN 20
+* VLAN 30
+
+The FortiGate then uses subinterfaces:
+
+* port1.10
+* port1.20
+* port1.30
+
+Each subinterface handles traffic tagged for its VLAN.
+
+---
+
+#### 6. Why Trunking Is Essential
+
+Without a trunk, VLAN traffic cannot reach:
+
+* Inter-VLAN routers
+* Firewalls
+* Other switches
+
+And you would need:
+
+* 3 cables for 3 VLANs
+* 10 cables for 10 VLANs
+
+With a trunk → **1 cable carries everything.**
+
+---
+
+#### 7. Benefits of Trunking
+
+✔ Reduces cabling
+✔ Allows VLAN expansion across switches
+✔ Works perfectly with FortiGate, routers, hypervisors
+✔ Supports inter-VLAN routing architectures
+✔ Required for enterprise network design
+
+---
+
+
+#### 8. Trunk Theory in One Sentence
+
+A **trunk port** is a single cable that carries **multiple VLANs**, using **802.1Q tags** so the receiving device knows which VLAN each frame belongs to.
+
+---
 
 ### 3.4 Configure TRUNK to FortiGate
 
@@ -174,9 +288,6 @@ end
 
 ---
 
-## 5. Static Routes on FortiGate
-
-### 5.1 Understanding Static Routes in This Network
 
 ## 5. Static Routes on FortiGate
 
