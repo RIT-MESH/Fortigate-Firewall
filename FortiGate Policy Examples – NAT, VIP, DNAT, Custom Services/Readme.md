@@ -2,6 +2,8 @@
 
 This document provides clean, ready-to-use FortiGate firewall policy examples covering:
 
+> **Note:** Sections 1–14 show clean configs for easy copy/paste. Section 15 contains fully commented versions of these configs (line-by-line explanations) so you can clearly understand what each command does.
+
 * Source NAT (SNAT)
 * Destination NAT (DNAT)
 * VIP (Virtual IP port forwarding)
@@ -666,13 +668,11 @@ config firewall policy
 end
 ```
 
-
-
 ---
 
-# 15. Code Reference (Easy Understanding)
+# 15. Commented Code Reference (Easy Understanding)
 
-Below are the most important examples above. Use these when you want to remember **why** each line is there.
+Below are commented versions of the most important examples above. Use these when you want to remember **why** each line is there.
 
 ## 15.1 SNAT – LAN to WAN (Interface NAT)
 
@@ -949,4 +949,142 @@ end
 
 ---
 
+## 15.11 Central SNAT Map
+
+```bash
+config system settings
+    set central-nat enable                # Turn on central NAT mode
+end
+
+config firewall central-snat-map
+    edit 1
+        set src-addr 192.168.10.0/24      # Original source subnet
+        set dst-addr 0.0.0.0/0            # Any destination (internet)
+        set protocol 6                    # Protocol 6 = TCP (0 = any)
+        set nat-ip 203.0.113.10           # Public IP used as source
+    next
+end
+```
+
+## 15.12 Static One-to-One NAT 
+
+```bash
+config firewall vip
+    edit "OneToOne-NAT"
+        set extip 203.0.113.40            # Public IP on WAN
+        set mappedip 192.168.10.40        # Internal server IP
+        set extintf "wan1"               # Interface where VIP lives
+    next
+end
+
+config firewall policy
+    edit 4
+        set srcintf "wan1"               # Traffic arriving from internet
+        set dstintf "lan"                # Going into LAN
+        set srcaddr "all"                # Any external source
+        set dstaddr "OneToOne-NAT"       # VIP as destination
+        set action accept                 # Allow
+        set service ALL                   # All services – can restrict later
+    next
+end
+```
+
+## 15.13 LAN → DMZ and DMZ → LAN Policies
+
+```bash
+# LAN → DMZ (users accessing DMZ servers)
+config firewall policy
+    edit 11
+        set srcintf "lan"                 # From LAN users
+        set dstintf "dmz"                 # To DMZ
+        set srcaddr "LAN-SUBNET"         # LAN subnet object
+        set dstaddr "DMZ-SERVERS"        # Group of DMZ servers
+        set service ALL                   # All services (can restrict)
+        set action accept                 # Allow
+    next
+end
+
+# DMZ → LAN (restricted management)
+config firewall policy
+    edit 12
+        set srcintf "dmz"                 # From DMZ servers
+        set dstintf "lan"                 # To LAN
+        set srcaddr "DMZ-SERVERS"        # Only DMZ servers
+        set dstaddr "LAN-MGMT"           # Only management subnet/hosts
+        set service "SSH" "RDP"          # Only management ports
+        set action accept                 # Allow
+    next
+end
+```
+
+## 15.14 Troubleshooting Commands 
+
+```bash
+show firewall vip                        # List all VIP/DNAT objects
+show firewall policy                     # Show all firewall policies
+
+execute telnet <mapped_ip> <port>       # Test connectivity to real server
+execute telnet <vip_public_ip> <port>   # Test connectivity using VIP from FGT
+
+diag sys session list                   # Show session table entries
+
+diag firewall iprope lookup \
+    <src_ip> <dst_ip> <protocol>        # See which policy/NAT will match
+```
+
+## 15.15 NAT46 Example 
+
+```bash
+config firewall vip64
+    edit "NAT46-APP"
+        set extip 203.0.113.50           # IPv4 address used by clients
+        set mappedip6 2001:db8:200::50   # IPv6-only server address
+        set extintf "wan1"              # Interface facing IPv4 clients
+        set portforward enable
+        set extport 443                  # External HTTPS port
+        set mappedport 443               # Internal HTTPS port
+        set protocol tcp                 # TCP only
+    next
+end
+
+config firewall policy
+    edit 31
+        set srcintf "wan1"              # From IPv4 side
+        set dstintf "dmz"               # To IPv6/dual-stack side
+        set srcaddr "all"               # Any client
+        set dstaddr "NAT46-APP"         # VIP64 object
+        set action accept
+        set service "HTTPS"             # HTTPS service
+    next
+end
+```
+
+## 15.16 Double NAT VIP 
+
+```bash
+config firewall vip
+    edit "VIP-DBL-NAT"
+        set extip 10.0.0.2               # FGT WAN private IP (behind ISP)
+        set mappedip 192.168.10.50       # Internal server IP
+        set extintf "wan1"              # WAN interface
+        set portforward enable
+        set extport 8443                 # Port forwarded by ISP to FGT
+        set mappedport 443               # Real HTTPS port on server
+        set protocol tcp
+    next
+end
+
+config firewall policy
+    edit 60
+        set srcintf "wan1"              # From ISP router / internet
+        set dstintf "lan"               # To LAN
+        set srcaddr "all"
+        set dstaddr "VIP-DBL-NAT"       # VIP as destination
+        set action accept
+        set service "HTTPS"
+    next
+end
+```
+
+---
 
