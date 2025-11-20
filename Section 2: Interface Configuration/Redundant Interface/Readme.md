@@ -199,6 +199,7 @@ interface e0/7
 ```
 config system interface
     edit "port1"
+        set mode static
         set ip 192.168.1.99 255.255.255.0
         set allowaccess http https ping ssh
         set role lan
