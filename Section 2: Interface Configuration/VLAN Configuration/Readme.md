@@ -11,6 +11,9 @@ This document covers the full configuration for the following network topology:
 ---
 
 ## 1. Network Topology
+<img width="936" height="516" alt="image" src="https://github.com/user-attachments/assets/4eb2be72-b970-4e2d-85d4-711f07f559ad" />
+
+
 
 This section explains the overall physical and logical layout of the network, showing how all devices connect and how VLANs flow through the switch and FortiGate.
 
