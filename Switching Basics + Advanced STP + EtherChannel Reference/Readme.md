@@ -386,7 +386,7 @@ spanning-tree guard root
 
 # 8. Fully Commented Reference
 
-## 8.1 Access Port (Commented)
+## 8.1 Access Port 
 
 ```bash
 interface e0/1                       # Configure interface e0/1
@@ -394,7 +394,7 @@ interface e0/1                       # Configure interface e0/1
  switchport access vlan 10           # Assign this port to VLAN 10
 ```
 
-## 8.2 Trunk Port with Native VLAN (Commented)
+## 8.2 Trunk Port with Native VLAN 
 
 ```bash
 interface e0/1                       # Trunk uplink
@@ -403,7 +403,7 @@ interface e0/1                       # Trunk uplink
  switchport trunk native vlan 10     # Native VLAN = untagged VLAN
 ```
 
-## 8.3 VLAN Creation (Commented)
+## 8.3 VLAN Creation 
 
 ```bash
 vlan 10                              # Create VLAN 10
@@ -412,7 +412,7 @@ vlan 20
  name Servers
 ```
 
-## 8.4 EtherChannel LACP (Commented)
+## 8.4 EtherChannel LACP 
 
 ```bash
 interface range g0/1 - 2             # Select interfaces g0/1 and g0/2
@@ -423,13 +423,13 @@ interface port-channel 1             # Logical link
  switchport trunk allowed vlan 10,20,30
 ```
 
-## 8.5 STP Root Bridge (Commented)
+## 8.5 STP Root Bridge 
 
 ```bash
 spanning-tree vlan 1,10,20 priority 4096   # Force this switch as root
 ```
 
-## 8.6 STP Protections (Commented)
+## 8.6 STP Protections 
 
 ```bash
 interface e0/5
