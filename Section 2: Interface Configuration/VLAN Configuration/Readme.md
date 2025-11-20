@@ -176,6 +176,102 @@ end
 
 ## 5. Static Routes on FortiGate
 
+### 5.1 Understanding Static Routes in This Network
+
+## 5. Static Routes on FortiGate
+
+### 5.1 Understanding Static Routes in This Network
+
+Static routes are required because the **L3 switch**, not the FortiGate, performs inter-VLAN routing. The switch has **SVI interfaces** for VLAN 10, VLAN 20, and VLAN 30, allowing it to route traffic internally between these networks.
+
+However, the FortiGate only knows routes for networks **directly connected** to its own interfaces. Since **VLAN 20 and VLAN 30 are not directly connected** to the FortiGate, they exist **behind the switch**.
+
+Therefore, we must manually tell the FortiGate:
+
+* **"To reach 192.168.20.0/24, send traffic to the switch at 192.168.10.100."**
+* **"To reach 192.168.30.0/24, send traffic to the switch at 192.168.10.100."**
+
+The switch SVI for VLAN 10 (**192.168.10.100**) acts as the **next-hop gateway** for both VLAN 20 and VLAN 30.
+
+Without these static routes:
+
+* The FortiGate would receive traffic from those VLANs,
+* But it would have **no return path** back to VLAN 20 or VLAN 30,
+* Resulting in failed communication.
+
+These static routes ensure a complete and working **two-way routing path** between all VLANs and the FortiGate.
+
+---
+
+### 5.2 Routing Diagram
+
+```
+                +----------------------+
+                |      FortiGate       |
+                |   (Firewall/NAT)     |
+                |                      |
+                |  VLAN10: 192.168.10.1|
+                +----------+-----------+
+                           |
+                           | Trunk (VLAN 10/20/30)
+                           |
+                +----------+-----------+
+                |      L3 Switch       |
+                |  (Inter-VLAN Router) |
+                |                      |
+   VLAN 10 SVI →| 192.168.10.100       |
+   VLAN 20 SVI →| 192.168.20.100       |
+   VLAN 30 SVI →| 192.168.30.100       |
+                +--+--------+---------+
+                   |        |
+         VLAN 20   |        | VLAN 30
+                   |        |
+                 PC2       PC1
+```
+
+---
+
+### 5.3 Packet Flow Animation (Step-by-Step)
+
+#### **PC2 (VLAN 20) → Internet**
+
+```
+[1] PC2 sends packet to its gateway (192.168.20.100)
+       ↓
+[2] L3 Switch routes packet and forwards it to FortiGate (192.168.10.1)
+       ↓
+[3] FortiGate performs NAT → sends packet out WAN (port2)
+       ↓
+[4] Internet receives packet
+```
+
+---
+
+#### **Internet → PC2 (Return Traffic)**
+
+```
+[1] Internet returns packet to FortiGate public IP
+       ↓
+[2] FortiGate reverse-NATs it back to PC2’s private IP
+       ↓
+[3] FortiGate sends it to switch (192.168.10.100)
+       ↓
+[4] Switch routes to VLAN 20 and delivers to PC2
+```
+
+---
+
+#### **PC1 (VLAN 30) → PC2 (VLAN 20)**
+
+```
+[1] PC1 sends packet to gateway 192.168.30.100
+       ↓
+[2] L3 Switch routes directly between VLAN30 and VLAN20
+       ↓
+[3] PC2 receives packet (FortiGate NOT involved)
+```
+
+
 ```bash
 config router static
  edit 1
