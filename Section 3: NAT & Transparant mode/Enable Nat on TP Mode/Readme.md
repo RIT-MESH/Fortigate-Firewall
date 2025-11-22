@@ -9,6 +9,9 @@ This guide explains how to enable source NAT on a FortiGate that is operating in
 
 https://github.com/user-attachments/assets/e592c8c3-5ea3-424c-b742-2bc4485b7714
 
+https://github.com/user-attachments/assets/a6524d72-55fd-4ab0-881b-2c0ab6c251b1
+
+
 
 In Transparent Mode:
 
