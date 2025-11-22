@@ -49,8 +49,9 @@ Typical use cases:
 ---
 
 ## 3. FortiGate – Transparent Mode Configuration
+<img width="695" height="400" alt="image" src="https://github.com/user-attachments/assets/2f8a3006-6c4e-4e70-bc05-625a88dc7a06" />
 
-> Example hostname used: `FGT-TP`
+> Example hostname used: `Ritz`
 > Example management IP: `192.168.1.99/24`
 > Gateway: `192.168.1.1` (router/firewall in same subnet)
 
@@ -58,7 +59,7 @@ Typical use cases:
 
 ```bash
 config system global
-    set hostname FGT-TP
+    set hostname Ritz
 end
 ```
 
@@ -105,7 +106,7 @@ get system status
 Check for:
 
 ```
-Hostname: FGT-TP
+Hostname: Ritz
 Operation Mode: Transparent
 ```
 
