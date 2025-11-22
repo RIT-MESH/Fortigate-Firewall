@@ -1,5 +1,4 @@
-# Transparent Mode
-
+# FortiGate Transparent Mode 
 ## 1. Overview
 
 This lab demonstrates how to:
@@ -49,7 +48,7 @@ Typical use cases:
 ---
 
 ## 3. FortiGate – Transparent Mode Configuration
-<img width="695" height="400" alt="image" src="https://github.com/user-attachments/assets/2f8a3006-6c4e-4e70-bc05-625a88dc7a06" />
+<img width="732" height="437" alt="image" src="https://github.com/user-attachments/assets/9566d0f5-5929-40f0-9a8a-00b2af0caa96" />
 
 > Example hostname used: `Ritz`
 > Example management IP: `192.168.1.99/24`
@@ -106,7 +105,7 @@ get system status
 Check for:
 
 ```
-Hostname: Ritz
+Hostname: FGT-TP
 Operation Mode: Transparent
 ```
 
@@ -114,7 +113,22 @@ Operation Mode: Transparent
 
 ## 5. Cisco Router Configuration (Edge NAT Router)
 
+### What this section is doing (Theory)
+
+The Cisco router is acting as the **main Layer 3 gateway and NAT device** for the network. Because the FortiGate is in Transparent mode, it does not route or NAT; it only inspects and filters traffic while bridging it at Layer 2. The router is responsible for:
+
+* Providing the **default gateway** for the LAN (192.168.1.1)
+* Performing **NAT overload (PAT)** so LAN devices can reach external networks
+* Handling the **routing** between the LAN and the upstream provider/network
+
+In Transparent mode, the FortiGate sits **inline between the LAN and this router**, inspecting traffic without changing IPs. This keeps the router fully responsible for all L3/NAT functions while allowing the FortiGate to enforce security policies.
+
+Below is the configuration that enables the router to perform these tasks.
+
 ### 5.1 Interface configuration
+
+**What this step does:**
+This configures the router’s physical interfaces. FastEthernet0/0 becomes the LAN gateway for devices inside the network, and FastEthernet1/0 becomes the upstream/WAN-facing interface. Marking them as `ip nat inside` and `ip nat outside` prepares the router for NAT.
 
 ```bash
 conf t
@@ -132,11 +146,17 @@ interface FastEthernet1/0
 
 ### 5.2 Default route
 
+**What this step does:**
+This tells the router where to send all traffic that is not destined for the local LAN. In this lab, all unknown traffic is forwarded to the upstream next-hop (192.168.122.1). This enables internet or external network access for the LAN.
+
 ```bash
 ip route 0.0.0.0 0.0.0.0 192.168.122.1
 ```
 
 ### 5.3 NAT configuration
+
+**What this step does:**
+This creates a simple NAT overload setup so that devices in the 192.168.1.0/24 subnet can share a single public/upstream IP. The access list identifies the internal LAN, and the NAT rule translates their source addresses using the outside interface IP. This is essential because the FortiGate in Transparent mode does not perform NAT.
 
 ```bash
 access-list 1 permit 192.168.1.0 0.0.0.255
@@ -144,6 +164,9 @@ ip nat inside source list 1 interface FastEthernet1/0 overload
 ```
 
 ### 5.4 Verifying NAT
+
+**What this step does:**
+This shows active NAT translations on the router. It confirms whether LAN traffic is being translated correctly and helps verify that end‑to‑end connectivity is working through the FortiGate and out to the upstream network.
 
 ```bash
 show ip nat translations
