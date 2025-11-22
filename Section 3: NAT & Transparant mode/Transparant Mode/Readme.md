@@ -3,6 +3,14 @@
 
 This lab demonstrates how to:
 
+https://github.com/user-attachments/assets/519f32fe-48ec-4c29-9854-012f92e23a78
+
+
+https://github.com/user-attachments/assets/9c53256b-4ed0-4050-8acc-20f47d3d96bc
+
+
+
+
 * Understand FortiGate operation modes:
 
   * **NAT mode** (default)
