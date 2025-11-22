@@ -6,6 +6,10 @@ This guide explains how to enable source NAT on a FortiGate that is operating in
 
 ## 1. What You Are Achieving
 
+
+https://github.com/user-attachments/assets/e592c8c3-5ea3-424c-b742-2bc4485b7714
+
+
 In Transparent Mode:
 
 * The FortiGate does not participate in routing.
