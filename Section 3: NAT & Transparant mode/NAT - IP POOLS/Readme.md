@@ -155,6 +155,7 @@ This shows **where** NAT happens. The FortiGate translates the source IP using t
              └────────────────────┘
 ```
 
+
 ---
 
 # 3. GUI Workflow 
