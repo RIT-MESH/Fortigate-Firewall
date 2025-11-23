@@ -8,8 +8,11 @@ This document explains **DNAT (Destination NAT)** on FortiGate, combining:
 * Policy processing charts
 
 DNAT is used to publish internal servers so external clients can reach them.
-
 ---
+
+https://github.com/user-attachments/assets/8ee0cefc-5dae-49e2-8554-bf12a3152cb3
+
+
 
 # 1. What Is DNAT?
 
