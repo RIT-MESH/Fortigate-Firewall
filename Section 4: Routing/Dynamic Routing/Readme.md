@@ -47,7 +47,8 @@ This topology is used to demonstrate **dynamic routing protocols**:
 * BGP
 
 ---
-<img width="791" height="321" alt="image" src="https://github.com/user-attachments/assets/59810c75-ba96-4cfb-b62a-6d67ce6eb8fa" />
+<img width="789" height="276" alt="image" src="https://github.com/user-attachments/assets/29b081ab-6a9f-4da4-a1c5-28618f4fc921" />
+
 
 # 2. Before Starting – Router Interface Setup
 
