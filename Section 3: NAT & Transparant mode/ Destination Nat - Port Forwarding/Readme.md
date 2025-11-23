@@ -13,6 +13,10 @@ DNAT is used to publish internal servers so external clients can reach them.
 https://github.com/user-attachments/assets/8ee0cefc-5dae-49e2-8554-bf12a3152cb3
 
 
+https://github.com/user-attachments/assets/be102375-f1e2-403f-855e-704753b80a02
+
+
+
 
 # 1. What Is DNAT?
 
