@@ -11,6 +11,14 @@ This guide covers: **RIP, OSPF, and BGP** routing between FortiGate and a Cisco 
 
 ---
 
+
+
+https://github.com/user-attachments/assets/3257c3d5-1b31-4d1f-9118-d126e2a26b2d
+
+
+
+https://github.com/user-attachments/assets/ce894c8d-a3e1-4089-b5b9-a1b1f6a247bb
+
 # 1. Lab Topology
 
 ```
