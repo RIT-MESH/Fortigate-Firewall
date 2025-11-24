@@ -109,7 +109,7 @@ All other devices still use WAN1.
 
 ---
 
-# 6. CLI Configuration (from uploaded file)
+# 6. CLI Configuration 
 
 ```
 config router policy
